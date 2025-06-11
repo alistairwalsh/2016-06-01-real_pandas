@@ -1,7 +1,20 @@
+"""Utility to apply custom notebook CSS styles."""
+
+from pathlib import Path
 from IPython.core.display import HTML
-css = open('style/style-table.css').read() + open('style/style-notebook.css').read()
-HTML('<style>{}</style>'.format(css))
-<div style=" color:black; text-shadow: 1px 1px brown; font-size:2em;  background:url(style/images/Lucerne3.jpg)">,
-    <h1 align="center">Scientific Python
-    <img src="style/images/kundalini_pythons_gold_outline.png" style="height:360px; align:center; " ></h1>
-    </div>
+
+CSS_PATHS = ["style/style-table.css", "style/style-notebook.css"]
+
+
+def _load_css() -> str:
+    """Return the combined CSS from all style files."""
+    parts = []
+    for path in CSS_PATHS:
+        parts.append(Path(path).read_text())
+    return "".join(parts)
+
+
+def apply_style() -> HTML:
+    """Return an IPython ``HTML`` object with the notebook style."""
+    css = _load_css()
+    return HTML(f"<style>{css}</style>")
